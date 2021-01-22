@@ -6,7 +6,7 @@ dino_vectors2 = [vectors.add((-1.5,-2.5),v) for v in dino_vectors.trex]
 # exercise 2.4
 vector_drawing.draw(
    vector_drawing.Points(*dino_vectors.trex),
-   vector_drawing.Polygon(*dino_vectors.trex)
+   vector_drawing.Polygon(*dino_vectors.trex, color=vector_drawing.orange)
 )
 
 # exercise 2.5 render here:
