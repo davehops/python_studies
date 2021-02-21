@@ -4,7 +4,7 @@ from pathlib import Path
 
 #with open("/Users/davidhop/Documents/workspace/python_studies/mfp_models/teapot.off") as f:
 base_path = Path(__file__).parent
-print(base_path)
+# print(base_path)
 file_path = (base_path / 'teapot.off').resolve()
 with open(file_path) as f:
     lines = f.readlines()

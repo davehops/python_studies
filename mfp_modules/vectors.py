@@ -1,5 +1,8 @@
 from math import sqrt, sin, cos, acos, atan2
 
+err = 'ERROR: '
+err_LEN = err + 'vector lengths must be equal'
+
 # def add(v1,v2):
 #     return (v1[0] + v2[0], v1[1] + v2[1])
 
@@ -21,7 +24,10 @@ def length(v):
     return sqrt(sum([coord ** 2 for coord in v]))
 
 def dot(u,v):
+    if len(u) != len(v):
+        return err_LEN
     return sum([coord1 * coord2 for coord1,coord2 in zip(u,v)])
+# print(dot((1,1,1),(1,1,1)))
 
 def distance(v1,v2):
     return length(subtract(v1,v2))

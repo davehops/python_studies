@@ -1,6 +1,5 @@
 from mfp_modules import colors, vectors, vector_drawing, draw2d, draw3d, draw_model, transforms
 from mfp_models import teapot
-from vector_arrays import dino_vectors
 from random import uniform
 from math import sqrt, pi, cos, sin
 import matplotlib
@@ -121,5 +120,18 @@ def test_linearity_success(x,y):
     assert (x + y)*2 == y*2 + x*2
 # test_linearity_fail()
 # test_linearity_success()
-test_transform_linearity()
+# test_transform_linearity()
 
+# exercise 4.19
+def linear_combination(scalars, *vects):
+    scaled = [vectors.scale(s,v) for s,v in zip(scalars,vects)]
+    return vectors.add(*scaled)
+# print(linear_combination([1,2,3], (1,0,0), (0,1,0), (0,0,1)))
+# print(linear_combination([0,0,1], (1,1,1), (1,0,1), (0,1,1)))
+# print(linear_combination([2,1,0], (1,1,1), (1,0,1), (0,1,1)))
+# print(linear_combination([-1,0,-1], (1,1,1), (1,0,1), (0,1,1)))
+
+# exercise 4.20
+def transform_standard_basis(funct):
+    return funct((1,0,0)), funct((0,1,0)), funct((0,0,1))
+# print(transform_standard_basis(transforms.rotate_x_by(pi/2)))
