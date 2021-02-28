@@ -1,3 +1,6 @@
+# Source materials from manning
+mfp_source/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

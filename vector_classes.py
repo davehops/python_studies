@@ -1,4 +1,7 @@
 from abc import ABCMeta, abstractmethod, abstractproperty
+from random import randint, uniform
+from math import sqrt, pi, cos, sin
+import numpy as np
 from mfp_modules import vectors
 from datetime import datetime
 
@@ -319,3 +322,93 @@ class Polynomial(Vector):
     @classmethod
     def zero(cls):
         return Polynomial(0)
+
+def standard_form(v1,v2):
+    x1, y1 = v1
+    x2, y2 = v2
+    a = y2 - y1
+    b = x1 - x2
+    c = x1 * y2 - y1 * x2
+    return a,b,c
+
+# print(standard_form((1,5),(2,3)))
+
+def intersection(u1,u2,v1,v2):
+    ### need to build method in class still...
+    a1, b1, c1 = standard_form(u1,u2)
+    a2, b2, c2 = standard_form(v1,v2)
+    m = np.array(((a1,b1),(a2,b2)))
+    c = np.array((c1,c2))
+    return np.linalg.solve(m,c)
+
+def do_segments_intersect(s1,s2):
+    u1,u2 = s1
+    v1,v2 = s2
+    d1,d2 = vectors.distance(*s1), vectors.distance(*s2)
+    try:
+        x,y = intersection(u1,u2,v1,v2)
+        return (vectors.distance(u1, (x,y)) <= d1 and
+                vectors.distance(u2, (x,y)) <= d1 and
+                vectors.distance(v1, (x,y)) <= d2 and
+                vectors.distance(v2, (x,y)) <= d2)
+    except np.linalg.linalg.LinAlgError:
+        return False
+
+def segment_checks(s1,s2):
+    u1,u2 = s1
+    v1,v2 = s2
+    l1,l2 = vectors.distance(*s1), vectors.distance(*s2)
+    x,y = intersection(u1,u2,v1,v2)
+    return (vectors.distance(u1, (x,y)) <= l1,
+            vectors.distance(u2, (x,y)) <= l1,
+            vectors.distance(v1, (x,y)) <= l2,
+            vectors.distance(v2, (x,y)) <= l2)
+
+# print(segment_checks(((-3,0),(-1,0)),((0,-1),(0,1))))
+# print(segment_checks(((1,0),(3,0)),((0,-1),(0,1))))
+# print(segment_checks(((-1,0),(1,0)),((0,-3),(0,-1))))
+# print(segment_checks(((-1,0),(1,0)),((0,1),(0,3))))
+
+class PolygonModel():
+    def __init__(self, points):
+        self.points = points
+        self.rotation_angle = 0
+        self.x = 0
+        self.y = 0
+    def segments(self):
+        point_count = len(self.points)
+        points = self.transformed()
+        return [(points[i], points[(i+1)%point_count])
+                for i in range(0,point_count)]
+    def transformed(self):
+        rotated = [vectors.rotate2d(self.rotation_angle, v) for v in self.points]
+        return [vectors.add((self.x,self.y), v) for v in rotated]
+    def does_intersect(self, other_segment):
+        for segment in self.segments():
+            if do_segments_intersect(other_segment,segment):
+                return True
+        return False
+    def does_collide(self, other):
+        for segment in other.segments():
+            if self.does_intersect(segment):
+                return True
+            return False
+
+
+class Ship(PolygonModel):
+    def __init__(self):
+        super().__init__([(0.5,0), (-0.25,0.25), (-0.25,-0.25)])
+    def laser_segment(self):
+        #!# why is decimal after 20?
+        dist = 20. * sqrt(2)
+        x,y = self.transformed()[0]
+        return ((x,y),
+            (x + dist * cos(self.rotation_angle),
+             y + dist * sin(self.rotation_angle)))
+
+class Asteroid(PolygonModel):
+    def __init__(self):
+        sides = randint(5,9)
+        vs = [vectors.to_cartesian((uniform(0.5,1.0), 2*pi*i/sides))
+                for i in range(0,sides)]
+        super().__init__(vs)

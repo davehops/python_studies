@@ -95,11 +95,11 @@ poly = regular_polygon(36,2)
 poly2 = regular_polygon(18,1)
 poly3 = regular_polygon(72,3)
 # print(poly)
-vector_drawing.draw(
-   vector_drawing.Polygon(*poly, color=colors.blue),
-   vector_drawing.Points(*poly, color=colors.red),
-   vector_drawing.Polygon(*poly2, color=colors.blue),
-   vector_drawing.Points(*poly2, color=colors.red),
-   vector_drawing.Polygon(*poly3, color=colors.blue),
-   vector_drawing.Points(*poly3, color=colors.red)
-)
+# vector_drawing.draw(
+#    vector_drawing.Polygon(*poly, color=colors.blue),
+#    vector_drawing.Points(*poly, color=colors.red),
+#    vector_drawing.Polygon(*poly2, color=colors.blue),
+#    vector_drawing.Points(*poly2, color=colors.red),
+#    vector_drawing.Polygon(*poly3, color=colors.blue),
+#    vector_drawing.Points(*poly3, color=colors.red)
+# )

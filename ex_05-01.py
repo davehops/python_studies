@@ -35,10 +35,10 @@ def matrix_multiply(a,b):
 
 vec_a = random_matrix(3,3,2,9)
 vec_b = random_matrix(3,3,2,9)
-# print(vec_a)
-# print(vec_b)
-# print(matrix_multiply(vec_b,vec_a))
-# print(matrix_multiply(vec_a,vec_b))
+print(vec_a)
+print(vec_b)
+print(matrix_multiply(vec_b,vec_a))
+print(matrix_multiply(vec_a,vec_b))
 vec_zip = [(6, 5, 3), (8, 3, 5), (4, 6, 7)]
 # print(list(zip(*vec_zip)))
 vec_c = [(6,8,4),(6,9,6),(7,8,6)]
