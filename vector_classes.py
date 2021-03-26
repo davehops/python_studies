@@ -161,8 +161,6 @@ class Matrix(Vector):
                 tuple(0 for j in range(0, self.columns()))
             for i in range(0, self.rows())))
 
-
-
 from PIL import Image
 class ImageVector(Vector):
     size = (300,300)
@@ -190,18 +188,6 @@ class ImageVector(Vector):
         return ImageVector([(0,0,0) for _ in range(0,total_pixels)])
     def _repr_png_(self):
         return self.image()._repr_png_() 
-
-# class CarForSale():
-#     def __init__(self, model_year, mileage, price, posted_datetime,
-#                 model, source, location, description):
-#         self.model_year = model_year
-#         self.mileage = mileage
-#         self.price = price
-#         self.posted_datetime = posted_datetime
-#         self.model = model
-#         self.source = source
-#         self.location = location
-#         self.description = description
 
 class CarForSale(Vector):
     retrieved_date = datetime(2018,11,30,12)
@@ -375,6 +361,10 @@ class PolygonModel():
         self.rotation_angle = 0
         self.x = 0
         self.y = 0
+        self.vx = 0
+        self.vy = 0
+        self.angular_velocity = 0
+        self.draw_center = False
     def segments(self):
         point_count = len(self.points)
         points = self.transformed()
@@ -393,7 +383,19 @@ class PolygonModel():
             if self.does_intersect(segment):
                 return True
             return False
-
+    def move(self, milliseconds):
+        dx, dy = (self.vx * milliseconds / 1000.0,
+                  self.vy * milliseconds / 1000.0)
+        self.x, self.y = vectors.add((self.x,self.y), (dx,dy))
+        if self.x < -10:
+            self.x += 20
+        if self.y < -10:
+            self.y += 20
+        if self.x > 10:
+            self.x -= 20
+        if self.y > 10:
+            self.y -= 20
+        self.rotation_angle += self.angular_velocity * milliseconds / 1000.0
 
 class Ship(PolygonModel):
     def __init__(self):
@@ -412,3 +414,5 @@ class Asteroid(PolygonModel):
         vs = [vectors.to_cartesian((uniform(0.5,1.0), 2*pi*i/sides))
                 for i in range(0,sides)]
         super().__init__(vs)
+        self.vx = uniform(-1,1)
+        self.vy = uniform(-1,1)
